@@ -9,17 +9,16 @@ authorLink: 'https://github.com/Q-Angelo'
 authorName: 'May Jun'
 authorAvatar: 'https://avatars0.githubusercontent.com/u/17956058?s=460&u=f3acebabd097e6e93d5be5a8366b980fea5b15aa&v=4'
 -->
-# Serverless Nodejs Rest API with TypeScript And MongoDB Atlas
 
-This is simple REST API example for AWS Lambda By Serverless framwork with TypeScript and MongoDB Atlas.
+# Serverless Nodejs Rest API with TypeScript
+
+This is simple REST API example for AWS Lambda By Serverless framwork with TypeScript.
 
 ## Use Cases
 
-* REST API with typescript
-* MongoDB Atlas data storage
-* Multi-environment management under Serverless
-* Mocha unit tests and lambda-tester interface test
-* AWS lambda function log view
+- REST API with typescript
+- Multi-environment management under Serverless
+- AWS lambda function log view
 
 ## Invoke the function locally
 
@@ -44,8 +43,8 @@ Serverless: Typescript compiled.
 
 ### To Test It Locally
 
-* Run ```npm install``` to install all the necessary dependencies.
-* Run ```npm run local``` use serverless offline to test locally. 
+- Run `npm install` to install all the necessary dependencies.
+- Run `npm run local` use serverless offline to test locally.
 
 ### Deploy on AWS, simply run:
 
@@ -67,17 +66,17 @@ Serverless: Packaging service...
 Serverless: Excluding development dependencies...
 Serverless: Uploading CloudFormation file to S3...
 Serverless: Uploading artifacts...
-Serverless: Uploading service aws-node-rest-api-typescript.zip file to S3 (1.86 MB)...
+Serverless: Uploading service lambda-typescript.zip file to S3 (1.86 MB)...
 Serverless: Validating template...
 Serverless: Updating Stack...
 Serverless: Checking Stack update progress...
 ......................................
 Serverless: Stack update finished...
 Service Information
-service: aws-node-rest-api-typescript
+service: lambda-typescript
 stage: dev
 region: us-east-1
-stack: aws-node-rest-api-typescript-dev
+stack: lambda-typescript-dev
 resources: 32
 api keys:
   None
@@ -88,11 +87,11 @@ endpoints:
   GET - https://xxxxxxxxxxx.execute-api.us-east-1.amazonaws.com/dev/books/{id}
   DELETE - https://xxxxxxxxxxx.execute-api.us-east-1.amazonaws.com/dev/books/{id}
 functions:
-  create: aws-node-rest-api-typescript-dev-create
-  update: aws-node-rest-api-typescript-dev-update
-  find: aws-node-rest-api-typescript-dev-find
-  findOne: aws-node-rest-api-typescript-dev-findOne
-  deleteOne: aws-node-rest-api-typescript-dev-deleteOne
+  create: lambda-typescript-dev-create
+  update: lambda-typescript-dev-update
+  find: lambda-typescript-dev-find
+  findOne: lambda-typescript-dev-findOne
+  deleteOne: lambda-typescript-dev-deleteOne
 layers:
   None
 Serverless: Removing old service artifacts from S3...
