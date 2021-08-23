@@ -3,6 +3,8 @@ import lambdaTester from 'lambda-tester'
 import * as booksMock from './books.mock'
 import { BookService } from '../app/service/books.service'
 import { mocked } from 'ts-jest/utils'
+import { PutItemCommand, PutItemInput } from '@aws-sdk/client-dynamodb'
+import { ddbClient } from '../app/utils/dynamic-client'
 
 jest.mock('../app/service/books.service', () => {
   return {
@@ -34,5 +36,25 @@ describe('books', () => {
         expect(findOneBookByIdFunc).toBeCalledWith(12345)
         expect(findOneBookByIdFunc).toBeCalledTimes(1)
       })
+  })
+
+  it('create_book', async () => {
+    const params: PutItemInput = {
+      TableName: 'book_tbl',
+      Item: {
+        id: {
+          N: '001',
+        },
+        name: {
+          S: 'name001',
+        },
+        description: {
+          S: 'description001',
+        },
+      },
+    }
+
+    const data = await ddbClient.send(new PutItemCommand(params))
+    console.log(data)
   })
 })
