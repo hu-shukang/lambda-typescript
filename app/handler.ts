@@ -28,4 +28,4 @@ export const findOne: Handler = (event: any, context: Context) => {
 
 export const deleteOne: Handler = (event: any) => booksController.deleteOne(event)
 
-export const sendEmail: Handler = (event: any) => emailsController.send(event)
+export const sendEmail: Handler = (_event: any) => emailsController.send(_event)

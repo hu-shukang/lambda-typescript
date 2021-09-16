@@ -7,6 +7,7 @@ npm-debug.log*
 yarn-debug.log*
 yarn-error.log*
 node_modules/*
+.build/**
 
 # Runtime data
 pids
@@ -58,7 +59,7 @@ typings/
 .yarn-integrity
 
 # dotenv environment variables file
-.env
+# .env
 
 # parcel-bundler cache (https://parceljs.org/)
 .cache

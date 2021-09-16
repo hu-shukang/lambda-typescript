@@ -6,16 +6,33 @@ provider:
   runtime: nodejs14.x
   region: ap-northeast-1
   environment:
-    NODE_ENV: dev
+    NODE_ENV: ${env:STAGE}
+  stage: ${env:STAGE}
 
 plugins:
   - serverless-plugin-typescript
   - serverless-offline
+  - serverless-dotenv-plugin
 
-package:
-  patterns:
-    - config/.env.stg
-    - config/.env.pro
+resources:
+  Resources:
+    TestTable:
+      Type: AWS::DynamoDB::Table
+      Properties:
+        TableName: test_tbl
+        PointInTimeRecoverySpecification:
+          PointInTimeRecoveryEnabled: true
+        AttributeDefinitions:
+          - AttributeName: uuid
+            AttributeType: S
+        KeySchema:
+          - AttributeName: uuid
+            KeyType: HASH
+        BillingMode: PAY_PER_REQUEST
+        SSESpecification:
+          SSEEnabled: true
+        StreamSpecification:
+          StreamViewType: NEW_IMAGE
 
 functions:
   create:
@@ -49,3 +66,14 @@ functions:
       - http:
           path: books/{id}
           method: delete
+  send-email:
+    handler: app/handler.sendEmail
+    timeout: 120
+    events:
+      - stream:
+          type: dynamodb
+          batchSize: 1
+          arn:
+            Fn::GetAtt:
+              - TestTable
+              - StreamArn

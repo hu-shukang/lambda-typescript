@@ -1,0 +1,17 @@
+version: 0.2
+
+phases:
+  install:
+    runtime-version:
+      nodejs: 14
+  pre_build:
+    commands:
+      - echo 'pre build'
+      - ls
+      - aws --version
+  build:
+    commands:
+      - echo '---------- dependencies install ----------'
+      - yarn install --frozen-lockfile
+      - echo '---------- deploy ----------'
+      - yarn deploy:${Env}

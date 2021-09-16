@@ -1,38 +1,38 @@
 import { EmailForm } from '../model/dto/email.dto'
 import { sesClient } from '../utils/ses-client'
-import { MessageUtil } from '../utils/message'
-import { SendEmailCommand, SendEmailCommandInput } from '@aws-sdk/client-ses'
+import { SendTemplatedEmailCommand, SendTemplatedEmailCommandInput } from '@aws-sdk/client-ses'
 
 export class EmailsController {
   async send(event: any) {
     console.log('send called')
-    const form: EmailForm = JSON.parse(event.body)
-    const input: SendEmailCommandInput = {
+    event.Records.forEach((record: any) => {
+      console.log('イベント種別:', record.eventName)
+      console.log('DynamoDB Record: %j', record.dynamodb)
+
+      if (record.eventName == 'INSERT') {
+        //項目が追加された時の処理
+        const newItem = record.dynamodb.NewImage
+        console.log(newItem)
+      }
+    })
+    const form: EmailForm = {
+      to: ['hushukang@gmail.com'],
+      name: 'HU SHUKANG',
+      favoriteanimal: 'Hello',
+    }
+    const input: SendTemplatedEmailCommandInput = {
       Destination: {
         CcAddresses: form.cc,
         ToAddresses: form.to,
         BccAddresses: form.bcc,
       },
-      Message: {
-        Body: {
-          Html: {
-            Charset: 'UTF-8',
-            Data: form.text,
-          },
-        },
-        Subject: {
-          Charset: 'UTF-8',
-          Data: form.subject,
-        },
-      },
-      Source: form.from,
+      Template: 'Temp01',
+      TemplateData: `{ "name": "${form.name}", "favoriteanimal": "${form.favoriteanimal}" }`,
+      Source: 'hu.manager@bt-hsk.com',
     }
-    const command = new SendEmailCommand(input)
-    try {
-      const data = await sesClient.send(command)
-      return MessageUtil.success(data)
-    } catch (e: any) {
-      return MessageUtil.error(500, e)
-    }
+    const command = new SendTemplatedEmailCommand(input)
+    const resp = await sesClient.send(command)
+    console.log('email send response: ')
+    console.log(resp)
   }
 }
