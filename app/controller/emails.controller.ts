@@ -10,7 +10,6 @@ export class EmailsController {
       console.log('DynamoDB Record: %j', record.dynamodb)
 
       if (record.eventName == 'INSERT') {
-        //項目が追加された時の処理
         const newItem = record.dynamodb.NewImage
         console.log(newItem)
         const form: EmailForm = {
@@ -26,14 +25,21 @@ export class EmailsController {
           },
           Template: 'Temp01',
           TemplateData: `{ "name": "${form.name}", "favoriteanimal": "${form.favoriteanimal}" }`,
-          Source: 'hu.manager@bt-hsk.com',
+          Source: 'xxx@xxx.com',
         }
         const command = new SendTemplatedEmailCommand(input)
-        const resp = await sesClient.send(command)
-        console.log('email send response: ')
-        console.log(resp)
+        sesClient
+          .send(command)
+          .then((resp: any) => {
+            console.log(resp)
+          })
+          .catch((error: any) => {
+            console.log(error)
+          })
+          .finally(() => {
+            console.log('send email finally')
+          })
       }
     })
-    
   }
 }
