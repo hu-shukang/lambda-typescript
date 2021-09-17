@@ -6,7 +6,7 @@ export class EmailsController {
   async send(event: any) {
     console.log('send called')
     event.Records.forEach((record: any) => {
-      console.log('イベント種別:', record.eventName)
+      console.log('eventName:', record.eventName)
       console.log('DynamoDB Record: %j', record.dynamodb)
 
       if (record.eventName == 'INSERT') {
