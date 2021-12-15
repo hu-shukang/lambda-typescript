@@ -6,33 +6,40 @@ export class EmailsController {
   async send(event: any) {
     console.log('send called')
     event.Records.forEach((record: any) => {
-      console.log('イベント種別:', record.eventName)
+      console.log('eventName:', record.eventName)
       console.log('DynamoDB Record: %j', record.dynamodb)
 
       if (record.eventName == 'INSERT') {
-        //項目が追加された時の処理
         const newItem = record.dynamodb.NewImage
         console.log(newItem)
+        const form: EmailForm = {
+          to: ['xxxx@gmail.com'],
+          name: 'xxxx',
+          favoriteanimal: 'Hello',
+        }
+        const input: SendTemplatedEmailCommandInput = {
+          Destination: {
+            CcAddresses: form.cc,
+            ToAddresses: form.to,
+            BccAddresses: form.bcc,
+          },
+          Template: 'Temp01',
+          TemplateData: `{ "name": "${form.name}", "favoriteanimal": "${form.favoriteanimal}" }`,
+          Source: 'xxx@xxx.com',
+        }
+        const command = new SendTemplatedEmailCommand(input)
+        sesClient
+          .send(command)
+          .then((resp: any) => {
+            console.log(resp)
+          })
+          .catch((error: any) => {
+            console.log(error)
+          })
+          .finally(() => {
+            console.log('send email finally')
+          })
       }
     })
-    const form: EmailForm = {
-      to: ['hushukang@gmail.com'],
-      name: 'HU SHUKANG',
-      favoriteanimal: 'Hello',
-    }
-    const input: SendTemplatedEmailCommandInput = {
-      Destination: {
-        CcAddresses: form.cc,
-        ToAddresses: form.to,
-        BccAddresses: form.bcc,
-      },
-      Template: 'Temp01',
-      TemplateData: `{ "name": "${form.name}", "favoriteanimal": "${form.favoriteanimal}" }`,
-      Source: 'hu.manager@bt-hsk.com',
-    }
-    const command = new SendTemplatedEmailCommand(input)
-    const resp = await sesClient.send(command)
-    console.log('email send response: ')
-    console.log(resp)
   }
 }
