@@ -8,11 +8,17 @@ provider:
   environment:
     NODE_ENV: ${env:STAGE}
   stage: ${env:STAGE}
+  apiGateway:
+    # accepted binary type for file uploads
+    # binaryMediaTypes:
+    #   - 'multipart/form-data'
 
 plugins:
   - serverless-plugin-typescript
   - serverless-offline
   - serverless-dotenv-plugin
+  # - serverless-apigw-binary
+  # - serverless-s3-sync
 
 resources:
   Resources:
@@ -33,6 +39,15 @@ resources:
           SSEEnabled: true
         StreamSpecification:
           StreamViewType: NEW_IMAGE
+    LambdaTypescriptBucket:
+      Type: AWS::S3::Bucket
+      Properties:
+        BucketName: lambda-typescript-bucket
+        PublicAccessBlockConfiguration:
+          BlockPublicAcls: false
+          BlockPublicPolicy: false
+          IgnorePublicAcls: false
+          RestrictPublicBuckets: false
 
 functions:
   create:
@@ -77,3 +92,9 @@ functions:
             Fn::GetAtt:
               - TestTable
               - StreamArn
+  add-file:
+    handler: app/handler.addFile
+    events:
+      - http:
+          path: file
+          method: post

@@ -37,7 +37,7 @@ class MessageUtil {
     }
     static error(code = 1000, message) {
         const result = new Result(StatusCode.success, code, message);
-        console.log(result.bodyToString());
+        // console.log(result.bodyToString());
         return result.bodyToString();
     }
 }

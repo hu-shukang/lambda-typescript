@@ -4,6 +4,7 @@ import path from 'path'
 import { BooksController } from './controller/books.controller'
 import { BookService } from './service/books.service'
 import { EmailsController } from './controller/emails.controller'
+import { FilesController } from './controller/files.controller'
 
 const dotenvPath = path.join(__dirname, '../', `config/.env.${process.env.NODE_ENV}`)
 dotenv.config({
@@ -13,6 +14,7 @@ dotenv.config({
 const bookService = new BookService()
 const booksController = new BooksController(bookService)
 const emailsController = new EmailsController()
+const filesController = new FilesController()
 
 export const create: Handler = (event: any, context: Context) => {
   return booksController.create(event, context)
@@ -29,3 +31,5 @@ export const findOne: Handler = (event: any, context: Context) => {
 export const deleteOne: Handler = (event: any) => booksController.deleteOne(event)
 
 export const sendEmail: Handler = (_event: any) => emailsController.send(_event)
+
+export const addFile: Handler = (_event: any) => filesController.add(_event)

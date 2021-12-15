@@ -1,5 +1,5 @@
 import { EmailForm } from '../model/dto/email.dto'
-import { sesClient } from '../utils/ses-client'
+import { sesClient } from '../utils/clients'
 import { SendTemplatedEmailCommand, SendTemplatedEmailCommandInput } from '@aws-sdk/client-ses'
 
 export class EmailsController {
